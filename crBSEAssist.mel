@@ -1,0 +1,51 @@
+/* ******************************* 
+******************************* 
+
+crBlendShapeEditorAssist 1.0
+
+Created On March 24th 2009
+Authored By - Crunk AKA Savio Fernandes
+
+Install & Execute:
+-Copy this file to your maya default script directory
+-Source "crBSEAssist"
+
+******************************* 
+********************************** */
+
+global proc crBSEAssist()
+{
+	int $size = 200;
+	BlendShapeEditor;
+	
+	string $totalBlendNodes[] = `ls -type blendShape`;
+	
+		for ($h = 0; $h < size($totalBlendNodes); $h++){
+		
+			int $weightCount = `blendShape -q -weightCount $totalBlendNodes[$h]`;
+		
+				for ($i = 0; $i < $weightCount; $i++){
+				
+					string $BlendControlNode = $totalBlendNodes[$h]+"_tgtLabel"+$i;
+					$oldtext = `textField -q -tx $BlendControlNode`;
+					
+					//error check so that you dont get multiple numbers
+					string $oldtext2[] = stringToStringArray($oldtext, "_");
+					string $value = `match "[0-9]+" ($oldtext2[0])`;
+					//
+					
+						if ($value != ($i+1))
+						{
+							$newtext = ($i+1) + "_" + $oldtext;
+							textField -e -tx $newtext $BlendControlNode;
+						}
+					textField -e -w $size $BlendControlNode;	
+					
+			
+				}
+		
+		}
+	
+}
+
+crBSEAssist();
